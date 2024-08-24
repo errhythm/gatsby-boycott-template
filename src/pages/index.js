@@ -194,7 +194,7 @@ const BoycottPage = () => {
                                 : ""
                             }`}
                           >
-                            {status}
+                            {t(status)}
                           </button>
                         ))
                       ) : (
@@ -202,7 +202,7 @@ const BoycottPage = () => {
                           onClick={() => handleProofClick(brand)}
                           className="flex-1 border border-red-700 p-1 rounded overflow-hidden text-ellipsis bg-red-700 hover:bg-red-800 text-white"
                         >
-                          {brand.status}
+                          {t(brand.status)}
                         </button>
                       )}
                     </div>
@@ -227,7 +227,7 @@ const BoycottPage = () => {
                           onClick={() => handleAlternativeClick(brand.name)}
                           className="border hover:bg-red-700 hover:text-white bg-none border-red-700 flex-1 px-2 py-1 rounded"
                         >
-                          Go Back
+                          {t('Go Back')}
                         </button>
                       </div>
                     </div>
