@@ -29,6 +29,12 @@ Boycott is a powerful and customizable template for creating boycott websites, b
 
     Edit `src/pages/index.js` to see your site update in real-time!
 
+## 🚀 Quick start (Netlify)
+
+Deploy this starter with one click on [Netlify](https://app.netlify.com/signup):
+
+[<img src="https://www.netlify.com/img/deploy/button.svg" alt="Deploy to Netlify" />](https://app.netlify.com/start/deploy?repository=https://github.com/errhythm/gatsby-boycott-template/)
+
 ## 🧐 What's inside?
 
 A quick look at the top-level files and directories you'll see in this Boycott project.
