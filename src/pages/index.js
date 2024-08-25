@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { Popover, PopoverTrigger, PopoverContent } from '@radix-ui/react-popover';
-import {Info} from "lucide-react";
-import { graphql } from 'gatsby';
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@radix-ui/react-popover";
+import { Info } from "lucide-react";
+import { graphql } from "gatsby";
 import ReactCardFlip from "react-card-flip";
 import Header from "./../components/header";
-import SuggestionModal from './../components/suggestion';
+import SuggestionModal from "./../components/suggestion";
 import "../index.css";
-import bangladeshFlag from '../assets/images/flags/Bangladesh.svg';
-import { useTranslation } from 'react-i18next';
-import i18next from '../locale/i18n';
-
+import bangladeshFlag from "../../static/assets/images/flags/Bangladesh.svg";
+import { useTranslation } from "react-i18next";
+import i18next from "../locale/i18n";
 
 const BoycottPage = ({ data }) => {
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -24,16 +27,21 @@ const BoycottPage = ({ data }) => {
 
   useEffect(() => {
     if (data && data.allFile && data.allFile.nodes) {
-      const brandData = data.allFile.nodes.map(node => ({
+      const brandData = data.allFile.nodes.map((node) => ({
         name: node.childMarkdownRemark.frontmatter.title,
         logo: node.childMarkdownRemark.frontmatter.logo,
         category: node.relativeDirectory,
         status: node.childMarkdownRemark.frontmatter.status,
         proofInfo: node.childMarkdownRemark.frontmatter.proofInfo,
         proofSource: node.childMarkdownRemark.frontmatter.proofSource,
+        alternativeName: node.childMarkdownRemark.frontmatter.alternativeName,
+        alternativeLogo: node.childMarkdownRemark.frontmatter.alternativeLogo,
       }));
       setBrands(brandData);
-      setCategories(["All", ...new Set(brandData.map(brand => brand.category))]);
+      setCategories([
+        "All",
+        ...new Set(brandData.map((brand) => brand.category)),
+      ]);
       setIsLoading(false);
     }
   }, [data]);
@@ -43,7 +51,9 @@ const BoycottPage = ({ data }) => {
   };
 
   const handleAlternativeClick = (brandName) => {
-    setFlippedCard(flippedCard === brandName ? null : brandName);
+    setFlippedCard((prevFlippedCard) =>
+      prevFlippedCard === brandName ? null : brandName
+    );
   };
 
   const handleCategoryClick = (category) => {
@@ -58,9 +68,10 @@ const BoycottPage = ({ data }) => {
     setSearchValue(event.target.value);
   };
 
-  const filteredBrands = brands.filter((brand) =>
-    (selectedCategory === "All" || brand.category === selectedCategory) &&
-    brand.name.toLowerCase().includes(searchValue.toLowerCase())
+  const filteredBrands = brands.filter(
+    (brand) =>
+      (selectedCategory === "All" || brand.category === selectedCategory) &&
+      brand.name.toLowerCase().includes(searchValue.toLowerCase())
   );
 
   const handleLanguageChange = (event) => {
@@ -86,11 +97,16 @@ const BoycottPage = ({ data }) => {
   return (
     <main className="flex min-h-screen flex-col px-2">
       <div className="w-full border-b border-gray-300">
-        <Header onSearchChange={handleSearchChange} searchValue={searchValue} onLanguageChange={handleLanguageChange} onSuggestionClick={handleSuggestionClick} />
+        <Header
+          onSearchChange={handleSearchChange}
+          searchValue={searchValue}
+          onLanguageChange={handleLanguageChange}
+          onSuggestionClick={handleSuggestionClick}
+        />
       </div>
       <div className="container mx-auto p-4">
         <div className="block">
-          <h1 className="font-bold text-2xl mb-2">{t('Categories')}</h1>
+          <h1 className="font-bold text-2xl mb-2">{t("Categories")}</h1>
           <div className="flex flex-row flex-wrap gap-2">
             {categories.map((category) => (
               <button
@@ -106,42 +122,41 @@ const BoycottPage = ({ data }) => {
           </div>
         </div>
         <div className="flex flex-row items-center justify-between mt-5 mb-2">
-          <h1 className="font-bold text-2xl">{t('Brands')}</h1>
+          <h1 className="font-bold text-2xl">{t("Brands")}</h1>
           <Popover>
-        <PopoverTrigger>
-          <button
-            aria-haspopup="dialog"
-            aria-expanded="false"
-            aria-controls="popover"
-          >
-            <div className="bg-red-700 hover:bg-red-800 rounded p-1">
-              <Info
-                className="text-white"
-                size={24}
-              />
-            </div>
-          </button>
-        </PopoverTrigger>
-        <PopoverContent
-          side="bottom"
-          align="center"
-          className="w-72 rounded-md border bg-popover p-4 text-popover-foreground shadow-md outline-none bg-white z-50 text-sm"
-        >
-          PLEASE NOTE! It is up to you to choose to consider this a valid argument/evidence or not.
-        </PopoverContent>
-      </Popover>
+            <PopoverTrigger>
+              <button
+                aria-haspopup="dialog"
+                aria-expanded="false"
+                aria-controls="popover"
+              >
+                <div className="bg-red-700 hover:bg-red-800 rounded p-1">
+                  <Info className="text-white" size={24} />
+                </div>
+              </button>
+            </PopoverTrigger>
+            <PopoverContent
+              side="bottom"
+              align="center"
+              className="w-72 rounded-md border bg-popover p-4 text-popover-foreground shadow-md outline-none bg-white z-50 text-sm"
+            >
+              PLEASE NOTE! It is up to you to choose to consider this a valid
+              argument/evidence or not.
+            </PopoverContent>
+          </Popover>
         </div>
 
         <div className="infinite-scroll-component__outerdiv">
-          <div
-            className="infinite-scroll-component"
-            style={{ height: "auto", overflow: "auto" }}
-          >
+          <div className="infinite-scroll-component">
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-            {filteredBrands.map((brand) => (
+              {filteredBrands.map((brand) => (
                 <ReactCardFlip
                   isFlipped={flippedCard === brand.name}
                   flipDirection="horizontal"
+                  containerStyle={{
+                    width: "100%",
+                    height: "100%",
+                  }}
                 >
                   <div
                     key={brand.name}
@@ -160,46 +175,41 @@ const BoycottPage = ({ data }) => {
                       {brand.name}
                     </h1>
                     <div className="flex flex-row gap-1 w-full">
-                      {Array.isArray(brand.status) ? (
-                        brand.status.map((status) => (
-                          <button
-                            key={status}
-                            onClick={() =>
-                              status === "Proof"
-                                ? handleProofClick(brand)
-                                : handleAlternativeClick(brand.name)
-                            }
-                            className={`flex-1 border border-red-700 p-1 rounded overflow-hidden text-ellipsis ${
-                              status === "Proof"
-                                ? "bg-red-700 hover:bg-red-800 text-white"
-                                : ""
-                            }`}
-                          >
-                            {t(status)}
-                          </button>
-                        ))
-                      ) : (
-                        <button
-                          onClick={() => handleProofClick(brand)}
-                          className="flex-1 border border-red-700 p-1 rounded overflow-hidden text-ellipsis bg-red-700 hover:bg-red-800 text-white"
-                        >
-                          {t(brand.status)}
-                        </button>
-                      )}
+                    {brand.proofInfo && (
+  <button
+    onClick={() => handleProofClick(brand)}
+    className="flex-1 border border-red-700 p-1 rounded overflow-hidden text-ellipsis bg-red-700 hover:bg-red-800 text-white"
+  >
+    {t("Proof")}
+  </button>
+)}
+{brand.alternativeName && (
+  <button
+    onClick={() => handleAlternativeClick(brand.name)}
+    className="flex-1 border border-red-700 p-1 rounded overflow-hidden text-ellipsis"
+  >
+    {t("Alternative")}
+  </button>
+)}
                     </div>
                   </div>
-
                   {brand.alternativeName && (
                     <div className="react-card-back border border-slate-200 flex flex-col items-center p-2 rounded flex-1 h-full">
-                      <div className="min-h-[60px] min-w-[60px] max-h-[60px] max-w-[60px] flex items-center justify-center">
-                        <img
-                          src={brand.alternativeLogo}
-                          alt={`${brand.alternativeName} logo`}
-                          width="60"
-                          height="60"
-                          loading="lazy"
-                        />
-                      </div>
+                      {brand.alternativeLogo ? (
+                        <div className="min-h-[60px] min-w-[60px] max-h-[60px] max-w-[60px] flex items-center justify-center">
+                          <img
+                            src={brand.alternativeLogo}
+                            alt={`${brand.alternativeName} logo`}
+                            width="60"
+                            height="60"
+                            loading="lazy"
+                          />
+                        </div>
+                      ) : (
+                        <div className="min-h-[60px] min-w-[60px] max-h-[60px] max-w-[60px] flex items-center justify-center">
+                          <span className="text-gray-400">No logo</span>
+                        </div>
+                      )}
                       <h1 className="mb-3 mt-1 text-ellipsis overflow-hidden whitespace-nowrap w-full text-center uppercase font-semibold">
                         {brand.alternativeName}
                       </h1>
@@ -208,7 +218,7 @@ const BoycottPage = ({ data }) => {
                           onClick={() => handleAlternativeClick(brand.name)}
                           className="border hover:bg-red-700 hover:text-white bg-none border-red-700 flex-1 px-2 py-1 rounded"
                         >
-                          {t('Go Back')}
+                          {t("Go Back")}
                         </button>
                       </div>
                     </div>
@@ -283,8 +293,8 @@ const BoycottPage = ({ data }) => {
         )}
 
         <SuggestionModal
-        showSuggestionModal={showSuggestionModal}
-        setShowSuggestionModal={setShowSuggestionModal}
+          showSuggestionModal={showSuggestionModal}
+          setShowSuggestionModal={setShowSuggestionModal}
         />
 
         <footer className="mt-8 text-center">
@@ -306,6 +316,8 @@ export const query = graphql`
             status
             proofInfo
             proofSource
+            alternativeName
+            alternativeLogo
           }
         }
         relativeDirectory

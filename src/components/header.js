@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useTranslation } from 'react-i18next';
 import i18next from '../locale/i18n';
-import bangladeshFlag from '../assets/images/flags/Bangladesh.svg';
+import bangladeshFlag from '../../static/assets/images/flags/Bangladesh.svg';
 
 const Header = (props) => {
   const { t, i18n } = useTranslation();
