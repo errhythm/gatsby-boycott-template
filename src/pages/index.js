@@ -1,71 +1,42 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Popover, PopoverTrigger, PopoverContent } from '@radix-ui/react-popover';
 import {Info} from "lucide-react";
+import { graphql } from 'gatsby';
 import ReactCardFlip from "react-card-flip";
 import Header from "./../components/header";
 import SuggestionModal from './../components/suggestion';
 import "../index.css";
-
+import bangladeshFlag from '../assets/images/flags/Bangladesh.svg';
 import { useTranslation } from 'react-i18next';
 import i18next from '../locale/i18n';
 
-const categories = [
-  "All",
-  "Bodycare",
-  "Cleaning",
-  "Cosmetics",
-  "Drinks",
-  "Entertainment",
-  "Fashion",
-  "Finance",
-  "Food",
-  "Haircare",
-  "Snacks",
-  "Supermarket",
-  "Technology",
-  "Pharmaceuticals",
-  "Famous People",
-  "Others",
-];
 
-const brands = [
-  {
-    name: "AMAZON",
-    logo: "https://d35qs7oh01bd1h.cloudfront.net/adidas.webp",
-    category: "Technology",
-    status: "Proof",
-    proofInfo:
-      "Amazon and Google are working together on Project Nimbus. Project Nimbus is a $1.2bn contract to provide cloud services for the test military and government. This technology allows for further surveillance of and unlawful data collection on Palestinians, and facilitates expansion of illegal settlements on Palestinian land.",
-    proofSource:
-      "https://www.middleeastmonitor.com/20210729-amazon-google-working-together-on-1-2bn-contract-to-provide-cloud-services-for-us-military/",
-  },
-  {
-    name: "BOOKING.COM",
-    logo: "booking-logo.png",
-    category: "Drinks",
-    status: ["Alternative", "Proof"],
-    alternativeName: "HALALBOOKING",
-    alternativeLogo: "halalbooking-logo.png",
-  },
-  { name: "DELL", logo: "dell-logo.png", status: "Proof" },
-  { name: "GOOGLE", logo: "google-logo.png", status: ["Alternative", "Proof"] },
-  {
-    name: "GOOGLE CHROME",
-    logo: "chrome-logo.png",
-    status: ["Alternative", "Proof"],
-  },
-  { name: "HP (HEWLETT PACKARD)", logo: "hp-logo.png", status: "Proof" },
-  { name: " (HEWLETT PACKARD)", logo: "hp-logo.png", status: "Proof" },
-  // Add more brands here...
-];
-
-const BoycottPage = () => {
+const BoycottPage = ({ data }) => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [proofModal, setProofModal] = useState(null);
   const [flippedCard, setFlippedCard] = useState(null);
   const [showSuggestionModal, setShowSuggestionModal] = useState(false);
   const [searchValue, setSearchValue] = useState("");
+  const [brands, setBrands] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const { t, i18n } = useTranslation();
+
+  useEffect(() => {
+    if (data && data.allFile && data.allFile.nodes) {
+      const brandData = data.allFile.nodes.map(node => ({
+        name: node.childMarkdownRemark.frontmatter.title,
+        logo: node.childMarkdownRemark.frontmatter.logo,
+        category: node.relativeDirectory,
+        status: node.childMarkdownRemark.frontmatter.status,
+        proofInfo: node.childMarkdownRemark.frontmatter.proofInfo,
+        proofSource: node.childMarkdownRemark.frontmatter.proofSource,
+      }));
+      setBrands(brandData);
+      setCategories(["All", ...new Set(brandData.map(brand => brand.category))]);
+      setIsLoading(false);
+    }
+  }, [data]);
 
   const handleProofClick = (brand) => {
     setProofModal(brand);
@@ -88,6 +59,7 @@ const BoycottPage = () => {
   };
 
   const filteredBrands = brands.filter((brand) =>
+    (selectedCategory === "All" || brand.category === selectedCategory) &&
     brand.name.toLowerCase().includes(searchValue.toLowerCase())
   );
 
@@ -98,6 +70,18 @@ const BoycottPage = () => {
   const handleSuggestionClick = () => {
     setShowSuggestionModal(true);
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <img
+          src={bangladeshFlag}
+          alt="Loading"
+          className="w-16 h-16 animate-spin"
+        />
+      </div>
+    );
+  }
 
   return (
     <main className="flex min-h-screen flex-col px-2">
@@ -146,8 +130,6 @@ const BoycottPage = () => {
           PLEASE NOTE! It is up to you to choose to consider this a valid argument/evidence or not.
         </PopoverContent>
       </Popover>
-
-
         </div>
 
         <div className="infinite-scroll-component__outerdiv">
@@ -156,7 +138,7 @@ const BoycottPage = () => {
             style={{ height: "auto", overflow: "auto" }}
           >
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-              {filteredBrands.map((brand) => (
+            {filteredBrands.map((brand) => (
                 <ReactCardFlip
                   isFlipped={flippedCard === brand.name}
                   flipDirection="horizontal"
@@ -306,7 +288,7 @@ const BoycottPage = () => {
         />
 
         <footer className="mt-8 text-center">
-          <p className="font-bold">40 BRANDS TO BOYCOTT</p>
+          <p className="font-bold">{`${brands.length} BRANDS TO BOYCOTT`}</p>
         </footer>
       </div>
     </main>
@@ -315,10 +297,18 @@ const BoycottPage = () => {
 
 export const query = graphql`
   query {
-    allFile {
+    allFile(filter: { sourceInstanceName: { eq: "brands" }, extension: { eq: "md" } }) {
       nodes {
-        name
-
+        childMarkdownRemark {
+          frontmatter {
+            title
+            logo
+            status
+            proofInfo
+            proofSource
+          }
+        }
+        relativeDirectory
       }
     }
   }

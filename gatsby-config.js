@@ -11,12 +11,14 @@ module.exports = {
   siteMetadata: {
     title: `The India Out`,
   },
-  plugins: [{
-    resolve: `gatsby-source-filesystem`,
-    options: {
-      name: `brands`,
-      path: `${__dirname}/brands/`,
+  plugins: [
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `brands`,
+        path: `${__dirname}/brands`,
+      },
     },
-  },
+    `gatsby-transformer-remark`,
   'gatsby-plugin-postcss',],
 }

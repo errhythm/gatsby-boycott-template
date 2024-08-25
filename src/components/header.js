@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useTranslation } from 'react-i18next';
 import i18next from '../locale/i18n';
+import bangladeshFlag from '../assets/images/flags/Bangladesh.svg';
 
 const Header = (props) => {
   const { t, i18n } = useTranslation();
@@ -12,7 +13,7 @@ const Header = (props) => {
     return (
     <div className="container mx-auto flex flex-row justify-between my-2 items-center">
         <div className="flex-1 flex justify-start">
-            <img alt="Flag Bangladesh" loading="lazy" width="40" height="40" src="/images/flags/Bangladesh.svg" />
+            <img alt="Flag Bangladesh" loading="lazy" width="40" height="40" src={bangladeshFlag} />
           </div>
           <div className="flex-1">
             <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
