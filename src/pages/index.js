@@ -65,7 +65,6 @@ const BoycottPage = () => {
   const [flippedCard, setFlippedCard] = useState(null);
   const [showSuggestionModal, setShowSuggestionModal] = useState(false);
   const [searchValue, setSearchValue] = useState("");
-  const [popperOpen, setPopperOpen] = useState(false);
   const { t, i18n } = useTranslation();
 
   const handleProofClick = (brand) => {
@@ -237,8 +236,6 @@ const BoycottPage = () => {
             </div>
           </div>
         </div>
-
-        {/* Proof Modal */}
         {proofModal && (
           <div
             className="justify-center md:mx-0 mx-5 items-center flex fixed inset-0 z-50"
@@ -315,5 +312,16 @@ const BoycottPage = () => {
     </main>
   );
 };
+
+export const query = graphql`
+  query {
+    allFile {
+      nodes {
+        name
+
+      }
+    }
+  }
+`;
 
 export default BoycottPage;

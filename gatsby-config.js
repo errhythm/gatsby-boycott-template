@@ -8,5 +8,15 @@
  * @type {import('gatsby').GatsbyConfig}
  */
 module.exports = {
-  plugins: ['gatsby-plugin-postcss',],
+  siteMetadata: {
+    title: `The India Out`,
+  },
+  plugins: [{
+    resolve: `gatsby-source-filesystem`,
+    options: {
+      name: `brands`,
+      path: `${__dirname}/brands/`,
+    },
+  },
+  'gatsby-plugin-postcss',],
 }
