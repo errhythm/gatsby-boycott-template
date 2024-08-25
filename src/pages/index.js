@@ -298,7 +298,8 @@ const BoycottPage = ({ data }) => {
         />
 
         <footer className="mt-8 text-center">
-          <p className="font-bold">{`${brands.length} BRANDS TO BOYCOTT`}</p>
+        <p className="font-bold mb-2">{`${brands.length} BRANDS TO BOYCOTT`}</p>
+        <p className="text-xs text-gray-500">Built & Designed with 🍵 by <a href="https://errhythm.me" className="underline hover:text-gray-700">Rhythm</a></p>
         </footer>
       </div>
     </main>
