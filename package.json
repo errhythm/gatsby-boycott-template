@@ -13,16 +13,16 @@
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"
   },
   "dependencies": {
-    "@radix-ui/react-popover": "^1.1.1",
-    "gatsby": "^5.14.1",
-    "gatsby-source-filesystem": "^5.13.1",
-    "gatsby-transformer-remark": "^6.13.1",
-    "i18next": "^23.14.0",
-    "lucide-react": "^0.435.0",
-    "react": "^18.2.0",
+    "@radix-ui/react-popover": "^1.1.15",
+    "gatsby": "^5.16.1",
+    "gatsby-source-filesystem": "^5.16.0",
+    "gatsby-transformer-remark": "^6.16.0",
+    "i18next": "^25.10.5",
+    "lucide-react": "^0.577.0",
+    "react": "^19.2.4",
     "react-card-flip": "^1.2.3",
-    "react-dom": "^18.2.0",
-    "react-i18next": "^15.0.1"
+    "react-dom": "^19.2.4",
+    "react-i18next": "^16.6.2"
   },
   "repository": {
     "type": "git",
@@ -32,9 +32,12 @@
     "url": "https://github.com/gatsbyjs/gatsby/issues"
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.20",
-    "gatsby-plugin-postcss": "^6.13.1",
-    "postcss": "^8.4.41",
-    "tailwindcss": "^3.4.10"
+    "@tailwindcss/postcss": "^4.2.2",
+    "gatsby-plugin-postcss": "^6.16.0",
+    "postcss": "^8.5.8",
+    "tailwindcss": "^4.2.2"
+  },
+  "overrides": {
+    "msgpackr": "^1.11.9"
   }
 }
